@@ -20,7 +20,7 @@ import { openBrowser, goto, $, dragAndDrop, closeBrowser, click, press, waitFor 
         const x = Math.floor(Math.random() * 800) + 300
         const y = Math.floor(Math.random() * 500) + 100
         const shouldBotTurnRandomNumber = Math.random()
-        await click({ x: 400, y: 500 })
+        await click({ x, y })
         await waitFor(500)
         if (shouldBotTurnRandomNumber < 0.3) {
           await press(['ArrowLeft'], { delay: 1000 })
