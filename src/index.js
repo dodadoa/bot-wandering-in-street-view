@@ -2,6 +2,11 @@ import { openBrowser, goto, $, dragAndDrop, closeBrowser, click, press, waitFor 
 import chalk from 'chalk'
 import execa from 'execa'
 
+const printing = async (toPrint) => {
+  const { stdout } = await execa('lp', ['-o', 'fit-to-page', `"images/${toPrint}]"`])
+  console.log(chalk.yellow(` ✔ printing ${stdout}`))
+}
+
 (async () => {
   try {
     await openBrowser({ headless: false, args: ["--start-fullscreen"] })
@@ -16,19 +21,23 @@ import execa from 'execa'
         enterStreetView = await $(".widget-titlecard-exitcontainer").exists()
       }
 
-      const url = await currentURL()
-      const streetViewLocation = url.split("/")[4]
-      const latLong = streetViewLocation.split(",").slice(0, 2)
-      console.log(chalk.yellow(` ✔ we are at ${latLong}`))
-      await screenshot({ fullPage:true, path: `images/${Date()}.png` })
-      await waitFor(100)
-
       for(let i = 0; i < 5; i++){
-        if(i === 4) {
+        // log the lat & long only the first time
+        // printing first time and last time
+        if(i === 0) {
+          const url = await currentURL()
+          const streetViewLocation = url.split("/")[4]
+          const latLong = streetViewLocation.split(",").slice(0, 2)
+          console.log(chalk.yellow(` ✔ we are at ${latLong}`))
           const toPrint = `${Date()}.png`
           await screenshot({ fullPage:true, path: `images/${toPrint}` })
-          const { stdout } = await execa('lp', ['-o', 'fit-to-page', `images/${toPrint}]`])
-          console.log(chalk.yellow(` ✔ printing ${stdout}`))
+          await printing(toPrint)
+          await waitFor(100)
+        }
+        if(i === 4) {
+          await screenshot({ fullPage:true, path: `images/${toPrint}` })
+          await printint(toPrint)
+          await waitFor(100)
         }
 
         const shouldBotTurnRandomNumber = Math.random()
