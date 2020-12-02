@@ -3,7 +3,7 @@ import chalk from 'chalk'
 import execa from 'execa'
 
 const printing = async (toPrint) => {
-  const { stdout } = await execa('lp', ['-o', 'fit-to-page', `'images/${toPrint}'`])
+  const { stdout } = await execa('lp', ['-o', 'fit-to-page', `images/${toPrint}`])
   console.log(chalk.yellow(` ✔ printing ${stdout}`))
 }
 
@@ -40,6 +40,7 @@ const getLatLong = async () => {
           await waitFor(100)
         }
         if(i === 4) {
+          const toPrint = `${Date()}.png`
           await screenshot({ fullPage:true, path: `images/${toPrint}` })
           await printint(toPrint)
           await waitFor(100)
