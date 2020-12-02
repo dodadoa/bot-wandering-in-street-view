@@ -24,6 +24,7 @@
   "homepage": "https://github.com/dodadoa/bot-wandering-in-street-view#readme",
   "dependencies": {
     "chalk": "^4.1.0",
+    "execa": "^4.1.0",
     "taiko": "1.0.25"
   },
   "devDependencies": {

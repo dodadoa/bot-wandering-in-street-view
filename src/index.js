@@ -1,5 +1,6 @@
 import { openBrowser, goto, $, dragAndDrop, closeBrowser, click, press, waitFor } from 'taiko'
 import chalk from 'chalk'
+import execa from 'execa'
 
 (async () => {
   try {
@@ -24,7 +25,10 @@ import chalk from 'chalk'
 
       for(let i = 0; i < 5; i++){
         if(i === 4) {
-          await screenshot({ fullPage:true, path: `images/${Date()}.png` })
+          const toPrint = `${Date()}.png`
+          await screenshot({ fullPage:true, path: `images/${toPrint}` })
+          const { stdout } = await execa('lp', ['-o', 'fit-to-page', `images/${toPrint}]`])
+          console.log(chalk.yellow(` ✔ printing ${stdout}`))
         }
 
         const shouldBotTurnRandomNumber = Math.random()
