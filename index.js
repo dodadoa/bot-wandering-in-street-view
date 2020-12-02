@@ -2,7 +2,7 @@ const { openBrowser, goto, $, dragAndDrop, closeBrowser, click, press, waitFor }
 
 (async () => {
   try {
-    await openBrowser({ headless: false })
+    await openBrowser({ headless: false, args: ["--start-fullscreen"] })
     await goto("https://www.google.co.th/maps/@18.7905292,98.9863039,17.97z")
     let enterStreetView = false;
     while(true) {
@@ -18,7 +18,7 @@ const { openBrowser, goto, $, dragAndDrop, closeBrowser, click, press, waitFor }
 
       for(let i = 0; i < 5; i++){
         const xRandom = Math.floor(Math.random() * 1000) + 300
-        const yRandom = Math.floor(Math.random() * 1000) + 100
+        const yRandom = Math.floor(Math.random() * 800) + 100
         const shouldBotTurnRandomNumber = Math.random()
         await click({ x: xRandom, y: yRandom })
         await waitFor(500)
