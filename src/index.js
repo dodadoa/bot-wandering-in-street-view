@@ -8,11 +8,9 @@ import { openBrowser, goto, $, dragAndDrop, closeBrowser, click, press, waitFor 
     while(true) {
       while(!enterStreetView) {
         const up = Math.floor(Math.random() * 1000) + 100
-        // const down = Math.floor(Math.random() * 1000)
         const left = Math.floor(Math.random() * 1000) + 500
-        // const right = Math.floor(Math.random() * 1000)
         await dragAndDrop($(".widget-expand-button-pegman-icon"), { up, left })
-        await waitFor(500)
+        await waitFor(100)
         enterStreetView = await $(".widget-titlecard-exitcontainer").exists()
       }
 
@@ -21,7 +19,7 @@ import { openBrowser, goto, $, dragAndDrop, closeBrowser, click, press, waitFor 
         const y = Math.floor(Math.random() * 500) + 100
         const shouldBotTurnRandomNumber = Math.random()
         await click({ x, y })
-        await waitFor(500)
+        await waitFor(100)
         if (shouldBotTurnRandomNumber < 0.3) {
           await press(['ArrowLeft'], { delay: 1000 })
         } else if (shouldBotTurnRandomNumber > 0.3 && shouldBotTurnRandomNumber < 0.6) {
@@ -31,8 +29,7 @@ import { openBrowser, goto, $, dragAndDrop, closeBrowser, click, press, waitFor 
         } 
       }
 
-      await waitFor(500)
-
+      await waitFor(100)
       enterStreetView = false
       await click($(".widget-titlecard-exitcontainer"))
     }
