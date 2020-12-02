@@ -1,10 +1,17 @@
-import { openBrowser, goto, $, dragAndDrop, closeBrowser, click, press, waitFor } from 'taiko'
+import { openBrowser, goto, $, dragAndDrop, closeBrowser, click, press, waitFor, currentURL } from 'taiko'
 import chalk from 'chalk'
 import execa from 'execa'
 
 const printing = async (toPrint) => {
   const { stdout } = await execa('lp', ['-o', 'fit-to-page', `"images/${toPrint}"`])
   console.log(chalk.yellow(` ✔ printing ${stdout}`))
+}
+
+const getLatLong = async () => {
+  const url = await currentURL()
+  const streetViewLocation = url.split("/")[4]
+  const latLong = streetViewLocation.split(",").slice(0, 2)
+  return latLong
 }
 
 (async () => {
@@ -25,9 +32,7 @@ const printing = async (toPrint) => {
         // log the lat & long only the first time
         // printing first time and last time
         if(i === 0) {
-          const url = await currentURL()
-          const streetViewLocation = url.split("/")[4]
-          const latLong = streetViewLocation.split(",").slice(0, 2)
+          const latLong = await getLatLong()
           console.log(chalk.yellow(` ✔ we are at ${latLong}`))
           const toPrint = `${Date()}.png`
           await screenshot({ fullPage:true, path: `images/${toPrint}` })
