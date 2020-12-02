@@ -3,7 +3,7 @@ import chalk from 'chalk'
 import execa from 'execa'
 
 const printing = async (toPrint) => {
-  const { stdout } = await execa('lp', ['-o', 'fit-to-page', `"images/${toPrint}"`])
+  const { stdout } = await execa('lp', ['-o', 'fit-to-page', `'images/${toPrint}'`])
   console.log(chalk.yellow(` ✔ printing ${stdout}`))
 }
 
