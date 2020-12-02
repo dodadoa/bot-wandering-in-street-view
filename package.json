@@ -4,13 +4,13 @@
   "description": "A bot wander aimlessly into the optic nerve of google street map",
   "main": "index.js",
   "scripts": {
-    "start": "start-mac",
+    "start": "npm run start-mac",
     "start-pi": "npm-run-all clean transpile run-in-pi",
     "run-in-pi": "DISPLAY=:0.0 TAIKO_BROWSER_PATH=/usr/bin/chromium-browser taiko --observe ./lib/index.js",
     "start-mac": "npm-run-all clean transpile run-in-app",
     "run-in-app": "taiko --observe ./lib/index.js",
     "transpile": "babel ./src -d ./lib ",
-    "clean": "rimraf lib"
+    "clean": "rimraf lib && rimraf images && mkdir images"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/dodadoa/bot-wandering-in-street-view#readme",
   "dependencies": {
+    "chalk": "^4.1.0",
     "taiko": "1.0.25"
   },
   "devDependencies": {
