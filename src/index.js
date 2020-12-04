@@ -1,10 +1,13 @@
 import { openBrowser, goto, $, dragAndDrop, closeBrowser, click, press, waitFor, currentURL } from 'taiko'
 import chalk from 'chalk'
 import execa from 'execa'
+import gm from 'gm'
 
 const printing = async (toPrint) => {
-  const { stdout } = await execa('lp', ['-o', 'fit-to-page', `images/${toPrint}`])
-  console.log(chalk.yellow(` ✔ printing ${stdout}`))
+  if (process.env.ENVIRONMENT_DEV === 'pi') {
+    const { stdout } = await execa('lp', ['-o', 'fit-to-page', `images/${toPrint}`])
+    console.log(chalk.yellow(` ✔ printing ${stdout}`))
+  }
 }
 
 const getLatLong = async () => {
@@ -36,13 +39,18 @@ const getLatLong = async () => {
           console.log(chalk.yellow(` ✔ we are at ${latLong}`))
           const toPrint = `${Date()}.png`
           await screenshot({ fullPage:true, path: `images/${toPrint}` })
+          await gm(`images/${toPrint}`).resize(100)
+            .noProfile()
+            .write(`images/${toPrint}`, (err) => {
+              if (!err) console.log(console.log(chalk.green(` ✔ resize images ${toPrint}`)));
+            });
           await printing(toPrint)
           await waitFor(100)
         }
         if(i === 4) {
           const toPrint = `${Date()}.png`
           await screenshot({ fullPage:true, path: `images/${toPrint}` })
-          await printint(toPrint)
+          await printing(toPrint)
           await waitFor(100)
         }
 
@@ -54,7 +62,7 @@ const getLatLong = async () => {
           await press(['ArrowRight'], { delay: 1000 })
         } else {
           const x = Math.floor(Math.random() * 800) + 300
-          const y = Math.floor(Math.random() * 500) + 100
+          const y = Math.floor(Math.random() * 500) + 300
           await click({ x, y })
         }
       }
