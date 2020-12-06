@@ -42,7 +42,7 @@ const getLatLong = async () => {
           await gm(`images/${toPrint}`).resize(100)
             .noProfile()
             .write(`images/${toPrint}`, (err) => {
-              if (!err) console.log(console.log(chalk.green(` ✔ resize images ${toPrint}`)));
+              if (!err) console.log(chalk.green(` ✔ resize images ${toPrint}`));
             });
           await printing(toPrint)
           await waitFor(100)
