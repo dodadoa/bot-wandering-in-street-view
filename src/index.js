@@ -2,6 +2,10 @@ import { openBrowser, goto, $, dragAndDrop, closeBrowser, click, press, waitFor,
 import chalk from 'chalk'
 import execa from 'execa'
 import gm from 'gm'
+import say from 'say'
+
+const INIT_MAP = 'https://www.google.co.th/maps/@18.9894038,98.7637624,14.83z'
+// const INIT_MAP = "https://www.google.co.th/maps/@18.7905292,98.9863039,17.97z"
 
 const printing = async (toPrint) => {
   if (process.env.ENVIRONMENT_DEV === 'pi') {
@@ -20,15 +24,20 @@ const getLatLong = async () => {
 (async () => {
   try {
     await openBrowser({ headless: false, args: ["--start-fullscreen"] })
-    await goto("https://www.google.co.th/maps/@18.7905292,98.9863039,17.97z")
+    await goto(INIT_MAP)
     let enterStreetView = false;
+    let accumulatedNotFound = 0;
     while(true) {
       while(!enterStreetView) {
         const up = Math.floor(Math.random() * 1000) + 100
-        const left = Math.floor(Math.random() * 1000) + 500
+        const left = Math.floor(Math.random() * 1000)
         await dragAndDrop($(".widget-expand-button-pegman-icon"), { up, left })
         await waitFor(100)
         enterStreetView = await $(".widget-titlecard-exitcontainer").exists()
+        accumulatedNotFound++
+        if (accumulatedNotFound > 5) {
+          await press(['ArrowDown'], { delay: 1500 })
+        }
       }
 
       for(let i = 0; i < 5; i++){
@@ -58,12 +67,18 @@ const getLatLong = async () => {
 
         if (shouldBotTurnRandomNumber < 0.2) {
           await press(['ArrowLeft'], { delay: 1000 })
+          say.speak('Maybe I go left')
+          say.stop()
         } else if (shouldBotTurnRandomNumber > 0.2 && shouldBotTurnRandomNumber < 0.4) {
           await press(['ArrowRight'], { delay: 1000 })
+          say.speak('Maybe I go right')
+          say.stop()
         } else {
-          const x = Math.floor(Math.random() * 800) + 300
+          const x = Math.floor(Math.random() * 700) + 300
           const y = Math.floor(Math.random() * 500) + 300
           await click({ x, y })
+          say.speak('Let me go straight')
+          say.stop()
         }
       }
 
